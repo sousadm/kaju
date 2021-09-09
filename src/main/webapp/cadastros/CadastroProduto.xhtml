@@ -1,0 +1,57 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Produto</ui:define>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<o:viewParam name="produto" value="#{produtoBean.produto}" />
+			<f:event listener="#{produtoBean.inicializar}" type="preRenderView" />
+		</f:metadata>
+
+		<h:form>
+			<h1>Produto</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/cadastros/CadastroProduto" />
+					<p:commandButton value="Salvar" id="botaoSalvar"
+						action="#{produtoBean.salvar}" update="@form"
+						onclick="jQuery(this).addClass('ui-state-disabled')" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" outcome="/cadastros/PesquisaProduto" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="painel"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Código" />
+				<p:inputText id="sku" size="20" maxlength="20"
+					value="#{produtoBean.produto.codigo}" />
+
+				<p:outputLabel value="Nome" for="nome" />
+				<p:inputText id="nome" size="60" maxlength="100"
+					value="#{produtoBean.produto.descricao}" />
+
+				<p:outputLabel value="Categoria" for="categoria" />
+				<p:selectOneMenu id="categoria"
+					value="#{produtoBean.produto.categoria}">
+					<f:selectItems value="#{produtoBean.listaCategoria}"
+						var="categoria" itemValue="#{categoria}"
+						itemLabel="#{categoria.descricao}" />
+				</p:selectOneMenu>
+
+			</p:panelGrid>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,69 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa produtos</ui:define>
+
+	<ui:define name="corpo">
+
+		<h:form>
+
+			<h1>Pesquisa produtos</h1>
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar"
+						action="#{produtoBean.pesquisar}" update="@form"
+						onclick="jQuery(this).addClass('ui-state-disabled')" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Novo" outcome="/cadastros/CadastroProduto" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="painel"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+				<p:outputLabel value="Descrição" />
+				<p:inputText id="nome" size="40" value="#{produtoBean.filtro.nome}" />
+			</p:panelGrid>
+
+			<p:dataTable id="tabela" value="#{produtoBean.lista}" var="item"
+				style="margin-top: 20px" emptyMessage="Nenhum produto encontrado."
+				rows="10" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+				<p:column headerText="Código"
+					style="text-align: center; width: 100px">
+					<h:outputText value="#{item.codigo}" />
+				</p:column>
+				<p:column headerText="Descrição">
+					<h:outputText value="#{item.descricao}" />
+				</p:column>
+				<p:column headerText="Categoria" style="width: 250px">
+					<h:outputText value="#{item.categoria.descricao}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center">
+
+					<p:button icon="ui-icon-pencil" title="Editar"
+						outcome="/cadastros/CadastroProduto">
+						<f:param name="produto" value="#{item.id}" />
+					</p:button>
+
+					<p:commandButton icon="ui-icon-trash" process="@this"
+						title="Excluir" update="tabela"
+						action="#{produtoBean.excluir(item)}">
+						<p:confirm icon="ui-icon-alert" header="Confirmação"
+							message="Excluir o registro atual?" />
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
